@@ -52,7 +52,14 @@
         <input type="text" class="form-control" placeholder="Text input" style="left: 348px; width: 592px; overflow: hidden; position: relative;">
         <button class="btn btn-success text-center" style="height: 40px; width: 222px; overflow: hidden;">Push To PlayList</button>
         <script type="text/javascript" src="a.js"></script>
-        <input id="clickMe" type="button" value="clickme" onclick="toLOGIN();" />
+
+        <div id ="login">
+          <!-- new click me-->
+          <a href="/login" class="btn btn-primary">Log in with Spotify</a>
+          <!-- old click me -->
+          <input id="clickMe" type="button" value="clickme" onclick="toLOGIN();" />
+        </div>
+        
 
     </div>
 <script src="js/jquery.js"></script>
@@ -86,6 +93,20 @@ var spotifyApi = new SpotifyWebApi({
     clientId: clientId
   });
   
+  // Create the authroization URL (from api)
+  $.ajax({
+    url: 'https://api.spotify.com/v1/me',
+    headers: {
+      'Authorization': 'Bearer ' + access_token
+    },
+    success: function(response) {
+      userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+
+      $('#login').hide();
+      $('#loggedin').show();
+    }
+  });
+
   // Create the authorization URL
   var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
   function toLOGIN(){
