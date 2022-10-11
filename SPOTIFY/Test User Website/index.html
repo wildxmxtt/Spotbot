@@ -44,6 +44,20 @@
     <!-- FOOTER SECTION START-->
 
     <!-- FOOTER SECTION END-->
+      <div class="container">
+        <div id="login">
+          <!-- This is frankensitend from spotify-->
+          <h1>This is an example of the Authorization Code flow</h1>
+          <a href="/login" class="btn btn-primary">Log in with Spotify</a>
+        </div>
+        <div id="loggedin">
+          <div id="user-profile">
+          </div>
+          <div id="oauth">
+          </div>
+          <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
+          <button class="btn btn-default" href = "/testL" id="obtain-new-token">API TEST BUTTON</button>
+          <!--Frankenstein over-->
     <div class="container" style="height: 281px; overflow: hidden;">
 
         <label class="control-label">PLAYLIST:</label>
@@ -52,49 +66,34 @@
         <input type="text" class="form-control" placeholder="Text input" style="left: 348px; width: 592px; overflow: hidden; position: relative;">
         <button class="btn btn-success text-center" style="height: 40px; width: 222px; overflow: hidden;">Push To PlayList</button>
         <script type="text/javascript" src="a.js"></script>
-        <input id="clickMe" type="button" value="clickme" onclick="toLOGIN();" />
+
 
     </div>
+  </div>
+</div>
 <script src="js/jquery.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/jquery-easing.js"></script>
 <script id="main-script" src="js/index-scripts.js"></script>
 
 <script type = "text/javascript">
-
-//THIS IS INTERACTING WITH SPOTIFY AND SPOTIFY API
-
-// credentials are optional
-var spotifyApi = new SpotifyWebApi({
-    clientId: 'a08383e569fd4d9d9f06812485b72a86',
-    clientSecret: '63008b05ef5949d8b23c151e4c0e0a82',
-    redirectUri: 'http://localhost:8888/callback'
-  });
-  
-  
-  spotifyApi.setAccessToken('');
-  
-  
-  var scopes = ['user-read-private', 'user-read-email'],
-    redirectUri = 'http://localhost:8888 ',
-    clientId = 'a08383e569fd4d9d9f06812485b72a86',
-    state = 'some-state-of-my-choice';
-  
-  // Setting credentials can be done in the wrapper's constructor, or using the API object's setters.
-  var spotifyApi = new SpotifyWebApi({
-    redirectUri: redirectUri,
-    clientId: clientId
-  });
-  
-  // Create the authorization URL
-  var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
-  function toLOGIN(){
-    alert("Button has been pushed");
-    alert(String(authorizeURL));
-  }
-  // https://accounts.spotify.com:443/authorize?client_id=5fe01282e44241328a84e7c5cc169165&response_type=code&redirect_uri=https://example.com/callback&scope=user-read-private%20user-read-email&state=some-state-of-my-choice
-  console.log(authorizeURL);
-
+(function() {
+  document.getElementById('obtain-new-token').addEventListener('click', function() {
+            $.ajax({
+              url: '/refresh_token',
+              data: {
+                'refresh_token': refresh_token
+              }
+            }).done(function(data) {
+              access_token = data.access_token;
+              oauthPlaceholder.innerHTML = oauthTemplate({
+                access_token: access_token,
+                refresh_token: refresh_token
+              });
+            });
+          }, false);
+        }
+)();
 </script>
 </body>
 
