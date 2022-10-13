@@ -1,13 +1,16 @@
-from asyncio.windows_events import NULL
 from sys import flags
-import discord
 from discord.ext import commands
 import re
+import discord
 from discord import Spotify
+#Token vaild as of 10/12/2022
 
-TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.Gvg7Nw.rLXyzkdM35iQE1U-vuAhaoHs20hpNzvfQgjpBQ'
+TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.GlFrDm.P1Bxn-dfJ4ZAhuyCBla_tThTzjv6mT-VG8eyuI'
 
-bot = commands.Bot(command_prefix='!', case_insensitive=True)
+intents = discord.Intents.all()
+intents.members = True
+intents.message_content = True
+bot = commands.Bot(command_prefix='!', case_insensitive=True, intents=intents)
 
 @bot.event
 async def on_ready():
