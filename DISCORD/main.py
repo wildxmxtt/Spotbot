@@ -12,6 +12,8 @@ intents.members = True
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', case_insensitive=True, intents=intents)
 
+
+
 @bot.event
 async def on_ready():
     #Lets programmer know that the bot has been activated
@@ -24,6 +26,13 @@ async def hlp(ctx):
     await ctx.reply("The commands for this bot go as follows: \n" + "slink (gives the user the link to the spotify playlist) \n" + "sLogin (logs into the account the spotify playlist will be created in")
 
 @bot.command()
+async def allSongs(ctx):
+    file = open("playlist.txt","r")
+    songs = file.read()
+    await ctx.reply("Here are all the songs \n" + songs)
+    file.close()
+
+@bot.command()
 async def sLink(ctx):
      await ctx.reply("Super cool temp link!!!11!!!!1!")
 
@@ -34,28 +43,49 @@ async def sLogin(ctx):
 
 #This is the vote command it takes context (ctx) the first option (opt1) and second option (opt2)
 
+#This is to grab the past songs that have been sent to the channel
+@bot.command()
+async def grabPast(ctx):
+    word = "https://open.spotify.com/track"
+    await ctx.reply("Grabbing songs now please wait until FINISHED is sent")
+    channel = ctx.channel
+
+    #MAKE SURE TO BUMP THIS LIMMIT UP TO A CRAZY NUMBER WEHN FULLY IMPLEMENTED
+    messages = [messages async for messages in ctx.channel.history(limit=500)] # This is the new way to do the .flatten() commented down below.
+    #messages = await ctx.channel.history(limit=500).flatten()
+
+
+    await ctx.send("Grabbing & flitering past messages.....")
+
+    # to make it work with only one file, surprisingly to me all the file handling can be done in dupCheck()
+    for msg in messages:
+        if word in msg.content:
+            dupCheck(msg.content)
+
+
+
+    await ctx.send("messages grabbed, Process complete")
+
+
 @bot.event
 async def on_message(msg):
+    #once again, all the file work can be moved over to the dupCheck() function for single file handling
     strCheck = "https://open.spotify.com/track"
     if re.search(strCheck, msg.content):
-        print("Valid Spotify Link")
-        #Creates a file called play con (playlist converter) for the spotify API to read from
-        file = open(r"C:\Users\Mattw\3D Objects\Coding\Raspi Projects\Discord_Spotify_Scrapper\allLinks.txt", "a")
+        if not "Here are all the songs" in str(msg.content): # This had to be added as the way it works, it would catch all songs comand as a new link for some reason.
+            print("Valid Spotify Link")
 
-        checkEmoji = "☑️"
-        rEmoji = "🔁" 
+            checkEmoji = "☑️"
+            rEmoji = "🔁" 
 
-        file.write(str(msg.content) + ",")
-
-        print("allLink file has been written to succesfully" )
-        test = dupCheck(msg.content)
+            test = dupCheck(msg.content)
 
 
     #Decides what emoji to add based on if it is a duplicate or not
-        if(test == True):
-            await msg.add_reaction (rEmoji)
-        else:
-            await msg.add_reaction(checkEmoji) 
+            if(test == True):
+                await msg.add_reaction (rEmoji)
+            else:
+                await msg.add_reaction(checkEmoji) 
         
     else:
      
@@ -69,9 +99,13 @@ def dupCheck(link):
     string1 = link
 
     # opening a text files
-    file = open("allLinks.txt", "r")
-    #opens the master link files that will be sent to the spotify server
-    file2 = open("playCon.txt", "a")
+    try:
+        file = open("playlist.txt", "r") # I am changing the name to playlist as it makes more sense in my head this could be a problem later so revert if needed.
+    except FileNotFoundError:
+        #make it create then open the file if the file does not exits
+        file = open("playlist.txt", "x")
+        file.close()
+        file = open("playlist.txt", "r")
 
     # setting flag and index to 0
     flag = 0
@@ -81,20 +115,31 @@ def dupCheck(link):
     for line in file:
         index += 1
         
-        # checking string is present in line or not
-        if string1 in line: 
+        # checking string is present in line or not (also adds some error checks for constraining commas to only accept what discord displays if commas are present.)
+        if string1.split(",", 1)[0] in line: 
             flag = 1
             break
-                
+
+        if string1.split("\n", 1)[0] in line: 
+            flag = 1
+            break
+    
+    #swap file operation to append
+    file.close()
+    file = open("playlist.txt", "a")
+
     # checking condition for string found or not
     if flag == 0:
         print('String', string1 , 'Not Found')
+        
+        songToWrite = str(link)
 
-        # closing text file	
-
-        file.close()
+        if "," in songToWrite:
+            songToWrite = songToWrite.split(",", 1)[0]
+        
+        file.write(songToWrite + "\n") # Changed to making every new song go to its own line for later reading simplicity
         print("Playcon File has been written to succesfully")
-        file2.write(str(link) + ",")
+        file.close()
         return False
     else:
         print('String', string1, 'Found In Line', index)
