@@ -137,13 +137,13 @@ def dupCheck(link):
             songToWrite = songToWrite.split(",", 1)[0]
         
         file.write(songToWrite + "\n") # Changed to making every new song go to its own line for later reading simplicity
-        print("Playcon File has been written to succesfully")
+        print("playlist file has been written to succesfully")
         file.close()
         return False
     else:
         print('String', string1, 'Found In Line', index)
         # closing text file	
-        print("DUPLICATE LINK FOUND, NOT ADDED TO PLAYCONFILE")
+        print("DUPLICATE LINK FOUND, NOT ADDED TO PLAYLIST FILE")
         file.close()
         return True
 
