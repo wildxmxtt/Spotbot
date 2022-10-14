@@ -2,7 +2,7 @@ from sys import flags
 from discord.ext import commands
 import re
 import discord
-from discord import Spotify
+
 #Token vaild as of 10/12/2022
 
 TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.GlFrDm.P1Bxn-dfJ4ZAhuyCBla_tThTzjv6mT-VG8eyuI'
@@ -55,7 +55,7 @@ async def grabPast(ctx):
     #messages = await ctx.channel.history(limit=500).flatten()
 
 
-    await ctx.send("Grabbing & flitering past messages.....")
+    await ctx.send("Grabbing & Flitering Past Messages.....")
 
     # to make it work with only one file, surprisingly to me all the file handling can be done in dupCheck()
     for msg in messages:
@@ -64,7 +64,7 @@ async def grabPast(ctx):
 
 
 
-    await ctx.send("messages grabbed, Process complete")
+    await ctx.send("Messages Grabbed, Process Complete")
 
 
 @bot.event
