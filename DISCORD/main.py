@@ -5,13 +5,10 @@ from discord.ext import commands
 import re
 from discord import Spotify
 
-<<<<<<< Updated upstream
-TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.GlFrDm.P1Bxn-dfJ4ZAhuyCBla_tThTzjv6mT-VG8eyuI'
-=======
-
 #Token vaild as of 10/12/2022
-TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.Gvg7Nw.rLXyzkdM35iQE1U-vuAhaoHs20hpNzvfQgjpBQ'
->>>>>>> Stashed changes
+TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.GlFrDm.P1Bxn-dfJ4ZAhuyCBla_tThTzjv6mT-VG8eyuI'
+
+
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
 
