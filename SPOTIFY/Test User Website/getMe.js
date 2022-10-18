@@ -1,4 +1,5 @@
-const fs = require('fs/promises');
+const fs = require('fs');
+const fsPromises = require('fs').promises;
 var SpotifyWebApi = require('spotify-web-api-node');
 
 var TOKEN = 'BLANK_AWAITING_TOKEN'
@@ -9,17 +10,17 @@ const spotifyApi = new SpotifyWebApi();
 
 //Gets the tokens from their respected files and sets their vaules 
 
-function accessG() {
-    fsPromises.readFile('access_token.txt', 'utf8', (err, data) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        console.log("THIS IS THE TOKEN" + data);
-        return data;
-      });
+async function accessG() {
+  fs.promises.readFile("access_token.txt")
+  .then(function(result) {
+    console.log("TOKEN:"+result);
+    return result.toString();
+  })
+  .catch(function(error) {
+     console.log(error);
+  })
 }
-
+accessG();
 
 /*
 async function refreshG() {
