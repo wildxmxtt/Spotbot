@@ -4,7 +4,10 @@ const app = express()
 const port = 8888
 const fs = require('fs/promises');
 var SpotifyWebApi = require('spotify-web-api-node');
-
+var tokens = {
+  refresh : "",
+  access : ""
+};
 //THIS GETS THE SERVER STARTED
 
 
@@ -77,11 +80,14 @@ var spotifyApi = new SpotifyWebApi({
        spotifyApi.setAccessToken(access_token);
        spotifyApi.setRefreshToken(refresh_token);
        
+
+
        //Saves the access token into a file
        async function aTokenF() {
          try {
            const content = access_token;
            await fs.writeFile('access_token.txt', content);
+           tokens.access = content;
          } catch (err) {
            console.log(err);
          }
@@ -93,6 +99,7 @@ var spotifyApi = new SpotifyWebApi({
          try {
            const content = refresh_token;
            await fs.writeFile('refresh_token.txt', content, {flag: 'w+'});
+           tokens.refresh = content;
          } catch (err) {
            console.log(err);
          }
@@ -107,6 +114,8 @@ var spotifyApi = new SpotifyWebApi({
          `Sucessfully retreived access token. Expires in ${expires_in} s.`
        );
        res.send('Success! You can now close the window.');
+       module.exports = {tokens};
+
 
  
   
