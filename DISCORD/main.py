@@ -3,7 +3,7 @@ from discord.ext import commands
 import re
 import discord
 
-#Token vaild as of 10/12/2022
+#Token vaild as of 12/26/2022
 
 TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.Gd6wN_.e0fN_Yk6W9If7wiRLaWUkrl-SuNexUMpwRa7R0'
 
@@ -178,6 +178,7 @@ def uritxt():
     file.close()
     file1.close()
     print("Uri text file written to succesfully!\n")
+    
 
     
         
