@@ -5,7 +5,8 @@ import discord
 
 #Token vaild as of 10/12/2022
 
-TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.GlFrDm.P1Bxn-dfJ4ZAhuyCBla_tThTzjv6mT-VG8eyuI'
+TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.Gd6wN_.e0fN_Yk6W9If7wiRLaWUkrl-SuNexUMpwRa7R0'
+
 
 intents = discord.Intents.all()
 intents.members = True
@@ -127,6 +128,7 @@ def dupCheck(link):
     file.close()
     file = open("playlist.txt", "a")
 
+
     # checking condition for string found or not
     if flag == 0:
         print('String', string1 , 'Not Found')
@@ -139,13 +141,44 @@ def dupCheck(link):
         file.write(songToWrite + "\n") # Changed to making every new song go to its own line for later reading simplicity
         print("playlist file has been written to succesfully")
         file.close()
+        uritxt()
         return False
     else:
-        print('String', string1, 'Found In Line', index)
+        print('String', string1, 'Found In Line', index, ' in playlist.txt')
         # closing text file	
         print("DUPLICATE LINK FOUND, NOT ADDED TO PLAYLIST FILE")
         file.close()
         return True
 
 
+def uritxt():
+    print("Writting to uri.txt.....: \n")
+    file = open("playlist.txt", "r+")
+    file1 = open("uri.txt", "w+")
+    count = 0
+    rline = file.readlines()
+    
+    #chops it up into uri format
+    for line in rline:
+        count += 1 
+        #replace x, with y
+        #line.replace(x,y)
+        fline = line.replace("https://open.spotify.com/track/", "spotify:track:")
+        file1.write(fline.split("?si")[0] + "," + "\n") #cuts off exess info from the uri and writes it to the file
+
+    file1.close()
+    
+    #read uri text file
+    file1 = open("uri.txt", "r+")
+    rline1 = file1.readlines()
+    for line in rline1:
+        count += 1 
+        print("Line{}: {}".format(count, line.strip()))
+
+    file.close()
+    file1.close()
+    print("Uri text file written to succesfully!\n")
+
+    
+        
 bot.run(TOKEN)
