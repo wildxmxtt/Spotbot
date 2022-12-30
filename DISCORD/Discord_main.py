@@ -3,9 +3,8 @@ from sys import flags
 import discord
 from discord.ext import commands
 import re
-from discord import Spotify
 
-TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.Gvg7Nw.rLXyzkdM35iQE1U-vuAhaoHs20hpNzvfQgjpBQ'
+TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.GJypqZ.o19JzktA2L9gicOgEQ6Ulxo4nZRHSLJTf0Pt24'
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
 

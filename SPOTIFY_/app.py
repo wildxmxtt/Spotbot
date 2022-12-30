@@ -2,8 +2,10 @@ from flask import Flask, request, url_for, session, redirect
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
+import DISCORD.Discord_main as dm #aiaised as dm
 
 app = Flask(__name__)
+
 
 #random string to sign the session 
 app.secret_key = "Sidhsfweiuofi8e983284bsCSCzkmlabs278a"
@@ -54,14 +56,20 @@ def getTracks():
 ###
 
 #This code works go to 14:00 on this yt video https://www.youtube.com/watch?v=1TYyX8soQ8M&list=PLhYNDxVvF4oXa9ihs8WCzEriZsCF3Pp7A&index=3
-#and alter the code to count the amount of songs in the playlist
-#by keeping track of this number you can check if the playlist has 
-#been added too or not 
+#Code is from here ^^
 
 ###
 
-
-    return str(sp.playlist_items(playlist_id=PLAYLISTID, limit=50, offset=0)['items'][0])
+    all_songs = []
+    count = 0
+    while True:
+        items = sp.playlist_items(playlist_id=PLAYLISTID, limit=50, offset=count * 50)['items']
+        count += 1
+        all_songs += items
+        if(len(items) < 50):
+            break
+    print("This track:" + tracks[0] + " is now the " + str(len(all_songs)) + " Song in the playlist")
+    return str(len(all_songs))
     #return str(sp.current_user_saved_tracks(limit=50, offset=0)['items'][0])#this returns the first saved track
 
 #this function will get us a new token if ours expires 
@@ -78,6 +86,7 @@ def get_token():
     if(is_expried):
         sp_oauth = create_spotify_oauth()
         token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
+        
     return token_info
 
 
