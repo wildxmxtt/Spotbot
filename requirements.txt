@@ -1,12 +1,1 @@
-Requriements for running:
-
-PYTHON DEPENDENCYS:
-
-
-LINUX: $ python3 example_bot.py
-WINDOWS: $ $ py -3 example_bot.py
-
-
-NODE JS DEPENDENCYS:
-Install node js
-install express
+NEED TO UPDATE THIS, UTILIZE THE .VENV FILE ON MATTS COMPUTER
