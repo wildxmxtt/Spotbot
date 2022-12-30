@@ -2,10 +2,12 @@ from sys import flags
 from discord.ext import commands
 import re
 import discord
+import app as web
+import requests
 
-#Token vaild as of 12/26/2022
+#Token vaild as of 12/30/2022
 
-TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.Gd6wN_.e0fN_Yk6W9If7wiRLaWUkrl-SuNexUMpwRa7R0'
+TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.GuV6UN.rvjsqmkvV-FkQupu7xQUW8DpeXnBmcTxEH2K8M'
 
 
 intents = discord.Intents.all()
@@ -152,22 +154,26 @@ def dupCheck(link):
 
 
 def uritxt():
-    print("Writting to uri.txt.....: \n")
+    print("Writting to uri.txt..... \n")
     file = open("playlist.txt", "r+")
     file1 = open("uri.txt", "w+")
     count = 0
     rline = file.readlines()
     
+
     #chops it up into uri format
     for line in rline:
         count += 1 
+
         #replace x, with y
         #line.replace(x,y)
+        
         fline = line.replace("https://open.spotify.com/track/", "spotify:track:")
-        file1.write(fline.split("?si")[0] + "," + "\n") #cuts off exess info from the uri and writes it to the file
+        file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
 
     file1.close()
     
+
     #read uri text file
     file1 = open("uri.txt", "r+")
     rline1 = file1.readlines()
@@ -177,9 +183,21 @@ def uritxt():
 
     file.close()
     file1.close()
-    print("Uri text file written to succesfully!\n")
-    
 
+
+    print("Uri text file written to succesfully!\n")
+    print("Sending songs off to spotify")
+    sendOff()
+
+def sendOff():
+    res = requests.get('http://localhost:5000/getTracks')
+    if res.status_code == 200:
+        open('uri.txt', 'w').close() #clears uri text file to make it ready for a new batch of songs 
+        return "Files Were Sent Succesfully!"
+    else:
+        return "There was an error, something went wrong when sending off URI file"
+
+   
     
         
 bot.run(TOKEN)
