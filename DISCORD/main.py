@@ -1,14 +1,16 @@
-from sys import flags
+import sys
 from discord.ext import commands
 import re
 import discord
 from datetime import datetime
 import json
 import webbrowser
-
+import os
+import time 
+import spotipy
+import requests
+import tst
 #Token vaild as of 12/30/2022
-
-import json
 
 with open("setup.json", 'r') as setupf:
     data = json.load(setupf)
@@ -16,7 +18,7 @@ with open("setup.json", 'r') as setupf:
     client_id = (data['client_id'])
     client_secret = (data['client_secret'])
     
-#TOKEN = "OTc2OTUxMzcwODE0OTg0MjUy.GuV6UN.rvjsqmkvV-FkQupu7xQUW8DpeXnBmcTxEH2K8M"
+
 redirect_uri = "http://localhost:5000/callback"
 
 intents = discord.Intents.all()
@@ -96,8 +98,9 @@ async def on_message(msg):
                 await msg.add_reaction (rEmoji)
             else:
                 await msg.add_reaction(checkEmoji) 
-                sendOff()
-        
+                print(tst.sendOff())
+                await msg.reply("Added to Spotify Playlist!")
+                
     else:
      
         print("Not valid Link")
@@ -198,13 +201,17 @@ def uritxt(link):
 #Option B just have the silly bot open and close new tabs to localhost5000
 #We will need a basch script to make this work on linux and windows simotaniously
 #The bash script neeeds to run both main.py and app.py at the same time z
-def sendOff():
-    url = "http://127.0.0.1:5000/"
-    webbrowser.get("C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe %s").open(url)
-    dt = datetime.now()
-    print("check app.py terminal if request was succesful TIMESTAMP:" + str(dt))
+#def sendOff():
+    #url = "http://127.0.0.1:5000/"
+    #webbrowser.get("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open(url)
+    #dt = datetime.now()
+    #print("check app.py terminal if request was succesful TIMESTAMP:" + str(dt))
+    #time.sleep(10)
+    #os.system("taskkill /im chrome.exe /f")
+    ###This may be dumb but fuck it
     
-
+    #read uri text file
+    
    
     
         

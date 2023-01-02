@@ -4,10 +4,11 @@ from spotipy.oauth2 import SpotifyOAuth
 import time
 import json
 from datetime import datetime
+
+
 #import DISCORD.main as dm #aiaised as dm
 
 app = Flask(__name__)
-
 
 #random string to sign the session 
 app.secret_key = "Sidhsfweiuofi8e983284bsCSCzkmlabs278a"
@@ -15,6 +16,11 @@ app.config['SESSION_COOKIE_NAME'] = 'Matts_Cookie'
 #token_info = ""
 TOKEN_INFO = "token_info"
 
+#gets info from setup file
+with open('setup.json', 'r') as setupf:
+    data = json.load(setupf)
+    client_id = (data['client_id'])
+    client_secret = data(['client_secret'])
 
 #a session is where we store data about a users session, prevents reloggin in
 #setting up endpoints
@@ -31,6 +37,7 @@ def redirectPage():
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
     session[TOKEN_INFO] = token_info #saving the token info in the session
+
     return redirect(url_for('getTracks', _external=True)) #sends us to the getTracks Page
 
 
@@ -80,11 +87,14 @@ def getTracks():
         all_songs += items
         if(len(items) < 50):
             break
-    print( "The amount of songs in the playlist are: " + str(len(all_songs))) #should add the amount that were in the uri.txt file 
+    spotifyRQ1  = str(len(all_songs))
+    flag = True
+    print( "The amount of songs in the playlist are: " + spotifyRQ1) #should add the amount that were in the uri.txt file 
     print("TIMESTAMP:" + datetime.now())
     open('DISCORD/uri.txt', 'w+').close()
     print("uri.txt has been reset")
-    return str(len(all_songs))
+    
+    return spotifyRQ1
     #return str(sp.current_user_saved_tracks(limit=50, offset=0)['items'][0])#this returns the first saved track
 
 #this function will get us a new token if ours expires 
@@ -105,11 +115,7 @@ def get_token():
     return token_info
 
 
-#gets info from setup file
-with open('setup.json', 'r') as setupf:
-    data = json.load(setupf)
-    client_id = (data['client_id'])
-    client_secret = data(['client_secret'])
+
 
 
 def create_spotify_oauth():
@@ -117,4 +123,4 @@ def create_spotify_oauth():
     client_id,
     client_secret,
     redirect_uri = url_for('redirectPage', _external=True), # Auto gernates this in the url_for http://localhost:5000/callback
-    scope = 'playlist-modify-public user-library-read' )
+    scope = 'playlist-modify-public user-library-read' )    
