@@ -1,7 +1,7 @@
 {
-    "client_id" : "a08383e569fd4d9d9f06812485b72a86",
+    "client_id": "a08383e569fd4d9d9f06812485b72a86",
     "client_secret": "63008b05ef5949d8b23c151e4c0e0a82",
-    "discord_token" : "OTc2OTUxMzcwODE0OTg0MjUy.GuV6UN.rvjsqmkvV-FkQupu7xQUW8DpeXnBmcTxEH2K8M",
-    "playlist_link" : "https://open.spotify.com/playlist/19NoSCFF5vyJx9Grr3OHwO?si=eb92e666f0554c6b"
+    "discord_token": "OTc2OTUxMzcwODE0OTg0MjUy.GuV6UN.rvjsqmkvV-FkQupu7xQUW8DpeXnBmcTxEH2K8M",
+    "playlist_link": "https://open.spotify.com/playlist/19NoSCFF5vyJx9Grr3OHwO?si=eb92e666f0554c6b",
+    "grab_past_flag": 0
 }
-

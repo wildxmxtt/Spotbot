@@ -4,7 +4,8 @@ import discord
 from datetime import datetime
 import json
 import tst
-#Token vaild as of 12/30/2022
+from os import path
+#Token vaild as of 1/2/2023
 
 with open("setup.json", 'r') as setupf:
     data = json.load(setupf)
@@ -12,6 +13,7 @@ with open("setup.json", 'r') as setupf:
     client_id = (data['client_id'])
     client_secret = (data['client_secret'])
     playlist_link = (data['playlist_link'])
+    grab_past_flag = (data['grab_past_flag'])
 
 
 intents = discord.Intents.all()
@@ -47,32 +49,38 @@ async def sLogin(ctx):
 #This is to grab the past songs that have been sent to the channel
 @bot.command()
 async def grabPast(ctx):
+
+    if(grab_past_flag) == 1: 
+        await ctx.reply("grabPast has already been called. If this is a mistake please go to the setup.json file and set grab_past_flag to 0")
+    else:
+
     
-    word = "https://open.spotify.com/track"
-    await ctx.reply("Grabbing songs now please wait until FINISHED is sent")
-    channel = ctx.channel
+        word = "https://open.spotify.com/track"
+        await ctx.reply("Grabbing songs now please wait until FINISHED is sent")
+        channel = ctx.channel
 
-    #MAKE SURE TO BUMP THIS LIMMIT UP TO A CRAZY NUMBER WEHN FULLY IMPLEMENTED
-    messages = [messages async for messages in ctx.channel.history(limit=500)] # This is the new way to do the .flatten() commented down below.
-    #messages = await ctx.channel.history(limit=500).flatten()
+        #MAKE SURE TO BUMP THIS LIMMIT UP TO A CRAZY NUMBER WEHN FULLY IMPLEMENTED
+        messages = [messages async for messages in ctx.channel.history(limit=500)] # This is the new way to do the .flatten() commented down below.
+        #messages = await ctx.channel.history(limit=500).flatten()
 
 
-    await ctx.send("Grabbing & Flitering Past Messages.....")
+        await ctx.send("Grabbing & Flitering Past Messages.....")
 
-    # to make it work with only one file, surprisingly to me all the file handling can be done in dupCheck()
-    for msg in messages:
-        if word in msg.content:
-            dupCheck(msg.content)
+        # to make it work with only one file, surprisingly to me all the file handling can be done in dupCheck()
+        for msg in messages:
+            if word in msg.content:
+                dupCheck(msg.content)
 
-            ####
-            ####
-            #MAKE A FLAG FOR GRABPAST, this function should only need to be ran once, make it so it used uritxt before the patch w
-            #where it adds the whole text file and then the next uri, since this should be the first command you run when entering the server
-            #the command should then be disabled in a way
-            #####
-            ####
+                ####
+                ####
+                #MAKE A FLAG FOR GRABPAST, this function should only need to be ran once, make it so it used uritxt before the patch w
+                #where it adds the whole text file and then the next uri, since this should be the first command you run when entering the server
+                #the command should then be disabled in a way
+                #####
+                ####
+        await ctx.send("Messages Grabbed, Process Complete, FINISHED")
 
-    await ctx.send("Messages Grabbed, Process Complete, FINISHED")
+
 
 
 @bot.event
@@ -163,33 +171,52 @@ def dupCheck(link):
 
 def uritxt(link):
     print("Writting to uri.txt..... \n")
-    file1 = open("uri.txt", "w+")
     
-    song = str(link)
-
+    if(grab_past_flag == 0):
+        print("Writting to uri.txt.....: \n")
+        file = open("playlist.txt", "r+")
+        file1 = open("uri.txt", "w+")
+        count = 0
+        rline = file.readlines()
+    
     #chops it up into uri format
+        for line in rline:
+            count += 1 
+            #replace x, with y
+            #line.replace(x,y)
+            fline = line.replace("https://open.spotify.com/track/", "spotify:track:")
+            file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
+        print("uri.txt has been written to")
+        file1.close()
+        #send off here then set grabpast to 1???
+    else:
+        file1 = open("uri.txt", "w+")
 
-        #replace x, with y
-        #line.replace(x,y)
-        
-    fline = song.replace("https://open.spotify.com/track/", "spotify:track:")
-    file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
+        song = str(link)
 
-    file1.close()
-    count = 0
+        #chops it up into uri format
 
-    #read uri text file
-    file1 = open("uri.txt", "r+")
-    rline1 = file1.readlines()
-    for line in rline1:
-        count += 1 
-        print("Line{}: {}".format(count, line.strip()))
+            #replace x, with y
+            #line.replace(x,y)
 
-    file1.close()
+        fline = song.replace("https://open.spotify.com/track/", "spotify:track:")
+        file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
+
+        file1.close()
+        count = 0
+
+        #read uri text file
+        file1 = open("uri.txt", "r+")
+        rline1 = file1.readlines()
+        for line in rline1:
+            count += 1 
+            print("Line{}: {}".format(count, line.strip()))
+
+        file1.close()
 
 
-    print("Uri text file written to succesfully!\n")
-    print("Sending songs off to spotify")
+        print("Uri text file written to succesfully!\n")
+        print("Sending songs off to spotify")
   
 
 #two routes for this function

@@ -11,8 +11,6 @@ def sendOff():
         data = json.load(info)
         playlist_link = (data['playlist_link']) #make a comment about how to pull playlist url
 
-
-
     open('spotify.json', 'w+').close() #clears old token info
 
     file1 = open("spotify.json", "a") #preparts file to be written to 
@@ -68,6 +66,7 @@ def sendOff():
             tracks[0] = (line.strip()) #adds to the first element over and over again
             sp.playlist_add_items(playlist_id=PLAYLISTID, items=[tracks][0]) #adds to the actual playlist
     print("Request was sent and went through!")
+    
     return "Request was sent and went through!"
  
 
