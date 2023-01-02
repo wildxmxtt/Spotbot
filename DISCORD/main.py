@@ -2,13 +2,22 @@ from sys import flags
 from discord.ext import commands
 import re
 import discord
-import app as web
-import requests
+from datetime import datetime
+import json
+import webbrowser
 
 #Token vaild as of 12/30/2022
 
-TOKEN = 'OTc2OTUxMzcwODE0OTg0MjUy.GuV6UN.rvjsqmkvV-FkQupu7xQUW8DpeXnBmcTxEH2K8M'
+import json
 
+with open("setup.json", 'r') as setupf:
+    data = json.load(setupf)
+    TOKEN = (data['discord_token'])
+    client_id = (data['client_id'])
+    client_secret = (data['client_secret'])
+    
+#TOKEN = "OTc2OTUxMzcwODE0OTg0MjUy.GuV6UN.rvjsqmkvV-FkQupu7xQUW8DpeXnBmcTxEH2K8M"
+redirect_uri = "http://localhost:5000/callback"
 
 intents = discord.Intents.all()
 intents.members = True
@@ -48,6 +57,7 @@ async def sLogin(ctx):
 #This is to grab the past songs that have been sent to the channel
 @bot.command()
 async def grabPast(ctx):
+    
     word = "https://open.spotify.com/track"
     await ctx.reply("Grabbing songs now please wait until FINISHED is sent")
     channel = ctx.channel
@@ -63,8 +73,6 @@ async def grabPast(ctx):
     for msg in messages:
         if word in msg.content:
             dupCheck(msg.content)
-
-
 
     await ctx.send("Messages Grabbed, Process Complete")
 
@@ -88,6 +96,7 @@ async def on_message(msg):
                 await msg.add_reaction (rEmoji)
             else:
                 await msg.add_reaction(checkEmoji) 
+                sendOff()
         
     else:
      
@@ -143,7 +152,7 @@ def dupCheck(link):
         file.write(songToWrite + "\n") # Changed to making every new song go to its own line for later reading simplicity
         print("playlist file has been written to succesfully")
         file.close()
-        uritxt()
+        uritxt(songToWrite)
         return False
     else:
         print('String', string1, 'Found In Line', index, ' in playlist.txt')
@@ -153,26 +162,22 @@ def dupCheck(link):
         return True
 
 
-def uritxt():
+def uritxt(link):
     print("Writting to uri.txt..... \n")
-    file = open("playlist.txt", "r+")
     file1 = open("uri.txt", "w+")
-    count = 0
-    rline = file.readlines()
     
+    song = str(link)
 
     #chops it up into uri format
-    for line in rline:
-        count += 1 
 
         #replace x, with y
         #line.replace(x,y)
         
-        fline = line.replace("https://open.spotify.com/track/", "spotify:track:")
-        file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
+    fline = song.replace("https://open.spotify.com/track/", "spotify:track:")
+    file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
 
     file1.close()
-    
+    count = 0
 
     #read uri text file
     file1 = open("uri.txt", "r+")
@@ -181,21 +186,24 @@ def uritxt():
         count += 1 
         print("Line{}: {}".format(count, line.strip()))
 
-    file.close()
     file1.close()
 
 
     print("Uri text file written to succesfully!\n")
     print("Sending songs off to spotify")
-    sendOff()
+  
 
+#two routes for this function
+#Option A figure out how to make vaild request to a server with a token 
+#Option B just have the silly bot open and close new tabs to localhost5000
+#We will need a basch script to make this work on linux and windows simotaniously
+#The bash script neeeds to run both main.py and app.py at the same time z
 def sendOff():
-    res = requests.get('http://localhost:5000/getTracks')
-    if res.status_code == 200:
-        open('uri.txt', 'w').close() #clears uri text file to make it ready for a new batch of songs 
-        return "Files Were Sent Succesfully!"
-    else:
-        return "There was an error, something went wrong when sending off URI file"
+    url = "http://127.0.0.1:5000/"
+    webbrowser.get("C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe %s").open(url)
+    dt = datetime.now()
+    print("check app.py terminal if request was succesful TIMESTAMP:" + str(dt))
+    
 
    
     
