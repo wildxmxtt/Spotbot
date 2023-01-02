@@ -49,12 +49,13 @@ async def sLogin(ctx):
 #This is to grab the past songs that have been sent to the channel
 @bot.command()
 async def grabPast(ctx):
+    with open("setup.json", 'r') as setupf:
+        data = json.load(setupf)
+        grab_past_flag = (data['grab_past_flag'])
 
     if(grab_past_flag) == 1: 
         await ctx.reply("grabPast has already been called. If this is a mistake please go to the setup.json file and set grab_past_flag to 0")
     else:
-
-    
         word = "https://open.spotify.com/track"
         await ctx.reply("Grabbing songs now please wait until FINISHED is sent")
         channel = ctx.channel
@@ -87,6 +88,7 @@ async def grabPast(ctx):
 async def on_message(msg):
     #once again, all the file work can be moved over to the dupCheck() function for single file handling
     strCheck = "https://open.spotify.com/track"
+
     if re.search(strCheck, msg.content):
         if not "Here are all the songs" in str(msg.content): # This had to be added as the way it works, it would catch all songs comand as a new link for some reason.
             print("Valid Spotify Link")
@@ -103,10 +105,10 @@ async def on_message(msg):
             else:
                 await msg.add_reaction(checkEmoji) 
                 print(tst.sendOff())
+                update_gp_flag()
                 await msg.reply("Added to Spotify Playlist!")
-                
-    else:
-     
+
+    else:            
         print("Not valid Link")
     
     await bot.process_commands(msg)
@@ -170,6 +172,10 @@ def dupCheck(link):
 
 
 def uritxt(link):
+    with open("setup.json", 'r') as setupf:
+        data = json.load(setupf)
+        grab_past_flag = (data['grab_past_flag'])
+
     print("Writting to uri.txt..... \n")
     
     if(grab_past_flag == 0):
@@ -235,7 +241,35 @@ def uritxt(link):
     
     #read uri text file
     
-   
+def update_gp_flag(): 
+ ###Update grab_past_flag#####
+    filename = "setup.json"
+    dictObj = []
+
+    # Check if file exists
+    if path.isfile(filename) is False:
+        raise Exception("File not found")
+    
+    # Read JSON file
+    with open(filename) as fp:
+        dictObj = json.load(fp)
+    
+    # Verify existing dict
+        print(dictObj)
+
+        print(type(dictObj))
+        # "grab_past_flag" : 0
+        dictObj.update({"grab_past_flag": 1 })
+    
+    # Verify updated dict
+        print(dictObj)
+    
+        with open(filename, 'w') as json_file:
+            json.dump(dictObj, json_file, 
+                        indent=4,  
+                        separators=(',',': '))
+    
+        print('Successfully updated setup.json')
     
         
 bot.run(TOKEN)

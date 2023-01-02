@@ -66,7 +66,8 @@ def sendOff():
             tracks[0] = (line.strip()) #adds to the first element over and over again
             sp.playlist_add_items(playlist_id=PLAYLISTID, items=[tracks][0]) #adds to the actual playlist
     print("Request was sent and went through!")
-    
+    f = open('uri.txt', 'r+')
+    f.truncate(0) 
     return "Request was sent and went through!"
  
 
