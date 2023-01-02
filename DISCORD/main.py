@@ -1,14 +1,8 @@
-import sys
 from discord.ext import commands
 import re
 import discord
 from datetime import datetime
 import json
-import webbrowser
-import os
-import time 
-import spotipy
-import requests
 import tst
 #Token vaild as of 12/30/2022
 
@@ -17,9 +11,8 @@ with open("setup.json", 'r') as setupf:
     TOKEN = (data['discord_token'])
     client_id = (data['client_id'])
     client_secret = (data['client_secret'])
-    
+    playlist_link = (data['playlist_link'])
 
-redirect_uri = "http://localhost:5000/callback"
 
 intents = discord.Intents.all()
 intents.members = True
@@ -38,21 +31,16 @@ async def on_ready():
 async def hlp(ctx):
     await ctx.reply("The commands for this bot go as follows: \n" + "slink (gives the user the link to the spotify playlist) \n" + "sLogin (logs into the account the spotify playlist will be created in")
 
-@bot.command()
-async def allSongs(ctx):
-    file = open("playlist.txt","r")
-    songs = file.read()
-    await ctx.reply("Here are all the songs \n" + songs)
-    file.close()
 
 @bot.command()
 async def sLink(ctx):
-     await ctx.reply("Super cool temp link!!!11!!!!1!")
+     await ctx.reply(playlist_link)
+
 
 
 @bot.command()
 async def sLogin(ctx):
-     await ctx.reply("login/temp/cute/guys")
+     await ctx.reply("https/localhost:5000 \n make sure flask server is running/ran once")
 
 #This is the vote command it takes context (ctx) the first option (opt1) and second option (opt2)
 
@@ -76,7 +64,15 @@ async def grabPast(ctx):
         if word in msg.content:
             dupCheck(msg.content)
 
-    await ctx.send("Messages Grabbed, Process Complete")
+            ####
+            ####
+            #MAKE A FLAG FOR GRABPAST, this function should only need to be ran once, make it so it used uritxt before the patch w
+            #where it adds the whole text file and then the next uri, since this should be the first command you run when entering the server
+            #the command should then be disabled in a way
+            #####
+            ####
+
+    await ctx.send("Messages Grabbed, Process Complete, FINISHED")
 
 
 @bot.event
