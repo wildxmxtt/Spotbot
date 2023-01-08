@@ -31,20 +31,17 @@ async def on_ready():
 #This is the help command that lets the user know all of the avaliable commands that can be used 
 @bot.command()
 async def hlp(ctx):
-    await ctx.reply("The commands for this bot go as follows: \n" + "slink (gives the user the link to the spotify playlist) \n" + "sLogin (logs into the account the spotify playlist will be created in")
+    await ctx.reply("The commands for this bot go as follows: \n" + 
+    "sLink (gives the user the link to the spotify playlist) \n" + 
+    "grabPast (allows for the user to grab past songs sent in a chat, this can only be ran once) \n" +
+    "grabPast (allows for the user to grab past songs sent in a chat, this can only be ran once) \n" 
+    )
 
-
+#gives the link set in the setup.json file
 @bot.command()
 async def sLink(ctx):
      await ctx.reply(playlist_link)
 
-
-
-@bot.command()
-async def sLogin(ctx):
-     await ctx.reply("https/localhost:5000 \n make sure flask server is running/ran once")
-
-#This is the vote command it takes context (ctx) the first option (opt1) and second option (opt2)
 
 #This is to grab the past songs that have been sent to the channel
 @bot.command()
@@ -172,9 +169,10 @@ def dupCheck(link):
 
 
 def uritxt(link):
+    #opens up the setup.json file
     with open("setup.json", 'r') as setupf:
         data = json.load(setupf)
-        grab_past_flag = (data['grab_past_flag'])
+        grab_past_flag = (data['grab_past_flag']) #this will check if the grab_past_flag has been updated
 
     print("Writting to uri.txt..... \n")
     
@@ -201,10 +199,6 @@ def uritxt(link):
         song = str(link)
 
         #chops it up into uri format
-
-            #replace x, with y
-            #line.replace(x,y)
-
         fline = song.replace("https://open.spotify.com/track/", "spotify:track:")
         file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
 
@@ -237,7 +231,7 @@ def uritxt(link):
     #print("check app.py terminal if request was succesful TIMESTAMP:" + str(dt))
     #time.sleep(10)
     #os.system("taskkill /im chrome.exe /f")
-    ###This may be dumb but fuck it
+    
     
     #read uri text file
     

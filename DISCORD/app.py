@@ -4,6 +4,7 @@ from spotipy.oauth2 import SpotifyOAuth
 import time
 import json
 from datetime import datetime
+import main as discordBot
 
 
 #import DISCORD.main as dm #aiaised as dm
@@ -20,14 +21,19 @@ TOKEN_INFO = "token_info"
 with open('setup.json', 'r') as setupf:
     data = json.load(setupf)
     client_id = (data['client_id'])
-    client_secret = data(['client_secret'])
+    client_secret = (data['client_secret'])
+
+#do this function above twice
 
 #a session is where we store data about a users session, prevents reloggin in
 #setting up endpoints
+
+
 @app.route('/')
 def login():
     sp_oauth = create_spotify_oauth()
     auth_url = sp_oauth.get_authorize_url()
+    discordBot.bot()
     return redirect(auth_url)
 
 @app.route('/redirect')

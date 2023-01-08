@@ -2,6 +2,7 @@ import json
 import time
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import app 
 
 
 
@@ -10,7 +11,8 @@ def sendOff():
     with open("setup.json", 'r') as info:
         data = json.load(info)
         playlist_link = (data['playlist_link']) #make a comment about how to pull playlist url
-
+        client_id = (data['client_id'])
+        client_secret = (data['client_secret'])
     open('spotify.json', 'w+').close() #clears old token info
 
     file1 = open("spotify.json", "a") #preparts file to be written to 
@@ -38,14 +40,15 @@ def sendOff():
 
         is_expried = expires_at - now < 60 #checks to see if the token is expired
 
+        time_left = expires_at - now
+
+        print("the time left on this token is: "+ str(time_left / 60) + "min")
+        app.get_token()
         if(is_expried): #if token is expried, get a new token with the refresh token
-            sp_oauth = SpotifyOAuth.create_spotify_oauth()
-            token_info = sp_oauth.refresh_access_token(refresh_token)
-            print(token_info)
+            app.get_token()
 
-    refesh_the_token() 
     ##########################################
-
+    refesh_the_token()
     sp = spotipy.Spotify(auth=TOKEN) #creates object that interacts with spotify api
     
         #chop playlist link into uri format
@@ -70,6 +73,5 @@ def sendOff():
     f.truncate(0) 
     return "Request was sent and went through!"
  
-
 
 #sendOff()
