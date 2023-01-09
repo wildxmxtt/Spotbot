@@ -200,8 +200,6 @@ def uritxt(link):
         file1.close()
         count = 0
 
-        #read uri text file
-
         print(pgrm_signature + "Uri text file written to succesfully!\n")
         print(pgrm_signature + "Sending songs off to spotify")
     
