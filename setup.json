@@ -1,8 +1,8 @@
 {
-    "client_id": "a08383e569fd4d9d9f06812485b72a86",
-    "client_secret": "63008b05ef5949d8b23c151e4c0e0a82",
-    "discord_token": "OTc2OTUxMzcwODE0OTg0MjUy.GuV6UN.rvjsqmkvV-FkQupu7xQUW8DpeXnBmcTxEH2K8M",
-    "playlist_link": "https://open.spotify.com/playlist/0XMf861jGIqPJRNHlLkCPj?si=60812477ece4457a",
-    "discord_channel": 1058255143625306192,
+    "client_id": "place spotify client id here",
+    "client_secret": "place spotify client secret here",
+    "discord_token": "place discord token here",
+    "playlist_link": "place playlist link here ",
+    "discord_channel": place channel code here,
     "grab_past_flag": 0
 }
