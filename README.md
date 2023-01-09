@@ -1,7 +1,7 @@
 # Spotbot2
 A discord bot that scrapes users spotifylinks from a set channel and automatically adds those songs to a set spotify playlist.
 
-**This readME file is meant to be looked at with the image_refrences.pdf found in this repo**
+**This readME file is meant to be looked at with the Image_refrences.pdf found in this repo**
 
 How to setup:
 1. Go to https://developer.spotify.com/dashboard/ refimage1 in image_refrences.pdf 
