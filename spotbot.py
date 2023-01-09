@@ -7,6 +7,8 @@ import playlist_update
 from os import path
 #Token vaild as of 1/2/2023
 
+pgrm_signature = "spotbot.py: "
+
 with open("setup.json", 'r') as setupf:
     data = json.load(setupf)
     TOKEN = (data['discord_token'])
@@ -14,6 +16,7 @@ with open("setup.json", 'r') as setupf:
     client_secret = (data['client_secret'])
     playlist_link = (data['playlist_link'])
     grab_past_flag = (data['grab_past_flag'])
+    discord_channel = (data['discord_channel'])
 
 
 intents = discord.Intents.all()
@@ -25,7 +28,7 @@ bot = commands.Bot(command_prefix='!', case_insensitive=True, intents=intents)
 @bot.event
 async def on_ready():
     #Lets programmer know that the bot has been activated
-    print('SpotifyBot: ON')
+    print(pgrm_signature + 'SpotifyBot: ON')
 
 
 #This is the help command that lets the user know all of the avaliable commands that can be used 
@@ -34,7 +37,7 @@ async def hlp(ctx):
     await ctx.reply("The commands for this bot go as follows: \n" + 
     "sLink (gives the user the link to the spotify playlist) \n" + 
     "grabPast (allows for the user to grab past songs sent in a chat, this can only be ran once) \n" +
-    "grabPast (allows for the user to grab past songs sent in a chat, this can only be ran once) \n" 
+    "When a user sends a messsage in THIS CHAT the bot will analyis that message, if it is a valid spotify link it will be placed into the playlist\n" 
     )
 
 #gives the link set in the setup.json file
@@ -83,32 +86,34 @@ async def grabPast(ctx):
 
 @bot.event
 async def on_message(msg):
+    #grabs the discord channel specified in setup.json
+    if msg.channel.id == discord_channel:
     #once again, all the file work can be moved over to the dupCheck() function for single file handling
-    strCheck = "https://open.spotify.com/track"
+        strCheck = "https://open.spotify.com/track"
 
-    if re.search(strCheck, msg.content):
-        if not "Here are all the songs" in str(msg.content): # This had to be added as the way it works, it would catch all songs comand as a new link for some reason.
-            print("Valid Spotify Link")
+        if re.search(strCheck, msg.content):
+            if not "Here are all the songs" in str(msg.content): # This had to be added as the way it works, it would catch all songs comand as a new link for some reason.
+                print(pgrm_signature + "Valid Spotify Link")
 
-            checkEmoji = "☑️"
-            rEmoji = "🔁" 
+                checkEmoji = "☑️"
+                rEmoji = "🔁" 
 
-            test = dupCheck(msg.content)
+                test = dupCheck(msg.content)
 
 
-    #Decides what emoji to add based on if it is a duplicate or not
-            if(test == True):
-                await msg.add_reaction (rEmoji)
-            else:
-                await msg.add_reaction(checkEmoji) 
-                print(playlist_update.sendOff())
-                update_gp_flag()
-                await msg.reply("Added to Spotify Playlist!")
+        #Decides what emoji to add based on if it is a duplicate or not
+                if(test == True):
+                    await msg.add_reaction (rEmoji)
+                else:
+                    await msg.add_reaction(checkEmoji) 
+                    print(pgrm_signature + playlist_update.sendOff())
+                    update_gp_flag()
+                    await msg.reply("Added to Spotify Playlist!")
 
-    else:            
-        print("Not valid Link")
-    
-    await bot.process_commands(msg)
+        else:            
+            print(pgrm_signature + "Not valid Link")
+        
+        await bot.process_commands(msg)
 
 
 
@@ -148,7 +153,7 @@ def dupCheck(link):
 
     # checking condition for string found or not
     if flag == 0:
-        print('String', string1 , 'Not Found')
+        print(pgrm_signature + 'String', string1 , 'Not Found')
         
         songToWrite = str(link)
 
@@ -156,14 +161,14 @@ def dupCheck(link):
             songToWrite = songToWrite.split(",", 1)[0]
         
         file.write(songToWrite + "\n") # Changed to making every new song go to its own line for later reading simplicity
-        print("playlist file has been written to succesfully")
+        print(pgrm_signature + "playlist file has been written to succesfully")
         file.close()
         uritxt(songToWrite)
         return False
     else:
-        print('String', string1, 'Found In Line', index, ' in playlist.txt')
+        print(pgrm_signature + 'String', string1, 'Found In Line', index, ' in playlist.txt')
         # closing text file	
-        print("DUPLICATE LINK FOUND, NOT ADDED TO PLAYLIST FILE")
+        print(pgrm_signature + "DUPLICATE LINK FOUND, NOT ADDED TO PLAYLIST FILE")
         file.close()
         return True
 
@@ -174,10 +179,10 @@ def uritxt(link):
         data = json.load(setupf)
         grab_past_flag = (data['grab_past_flag']) #this will check if the grab_past_flag has been updated
 
-    print("Writting to uri.txt..... \n")
+    print(pgrm_signature + "Writting to uri.txt..... \n")
     
     if(grab_past_flag == 0):
-        print("Writting to uri.txt.....: \n")
+        print(pgrm_signature + "Writting to uri.txt.....: \n")
         file = open("playlist.txt", "r+")
         file1 = open("uri.txt", "w+")
         count = 0
@@ -190,7 +195,7 @@ def uritxt(link):
             #line.replace(x,y)
             fline = line.replace("https://open.spotify.com/track/", "spotify:track:")
             file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
-        print("uri.txt has been written to")
+        print(pgrm_signature + "uri.txt has been written to")
         file1.close()
         #send off here then set grabpast to 1???
     else:
@@ -209,13 +214,13 @@ def uritxt(link):
         file1 = open("uri.txt", "r+")
         rline1 = file1.readlines()
         for line in rline1:
-            print("Line{}: {}".format(count, line.strip()))
+            print(pgrm_signature + "Line{}: {}".format(count, line.strip()))
 
         file1.close()
 
 
-        print("Uri text file written to succesfully!\n")
-        print("Sending songs off to spotify")
+        print(pgrm_signature + "Uri text file written to succesfully!\n")
+        print(pgrm_signature + "Sending songs off to spotify")
   
 
 #two routes for this function
@@ -227,7 +232,7 @@ def uritxt(link):
     #url = "http://127.0.0.1:5000/"
     #webbrowser.get("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open(url)
     #dt = datetime.now()
-    #print("check app.py terminal if request was succesful TIMESTAMP:" + str(dt))
+    #print(pgrm_signature + "check app.py terminal if request was succesful TIMESTAMP:" + str(dt))
     #time.sleep(10)
     #os.system("taskkill /im chrome.exe /f")
     
@@ -247,22 +252,14 @@ def update_gp_flag():
     with open(filename) as fp:
         dictObj = json.load(fp)
     
-    # Verify existing dict
-        print(dictObj)
-
-        print(type(dictObj))
         # "grab_past_flag" : 0
         dictObj.update({"grab_past_flag": 1 })
-    
-    # Verify updated dict
-        print(dictObj)
     
         with open(filename, 'w') as json_file:
             json.dump(dictObj, json_file, 
                         indent=4,  
                         separators=(',',': '))
     
-        print('Successfully updated setup.json')
+        print(pgrm_signature + 'Successfully updated setup.json')
     
-        
 bot.run(TOKEN)

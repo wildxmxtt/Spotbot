@@ -8,6 +8,7 @@ import base64
 
 
 def sendOff():
+    pgrm_signature = "playlist_update.py: "
     #opens the setup files
     with open("setup.json", 'r') as info:
         data = json.load(info)
@@ -55,17 +56,16 @@ def sendOff():
             response = requests.post('https://accounts.spotify.com/api/token', data=data, headers=headers)
 
             if(response.status_code == 200):
-                print("The request to went through we got a status 200; Spotify token refreshed")
+                print(pgrm_signature + "The request to went through we got a status 200; Spotify token refreshed")
                 response_json = response.json()
+                new_expire = response_json['expires_in']
+                print(pgrm_signature + "the time left on new token is: "+ str(new_expire / 60) + "min")
                 return response_json["access_token"]
             else:
-                print("ERROR! The response we got was: "+ str(response))
-                return TOKEN #last ditch to try and make it work 
+                print(pgrm_signature + "ERROR! The response we got was: "+ str(response))
+                return TOKEN #last ditch to try and make it work if TOKEN varaible is still active
 
     
-
-
-
     ##########################################
     now = int(time.time())#gets the current time 
 
@@ -73,11 +73,11 @@ def sendOff():
 
     time_left = expires_at - now
 
-    print("the time left on this token is: "+ str(time_left / 60) + "min")
+    print(pgrm_signature + "the time left on orginial token is: "+ str(time_left / 60) + "min")
     if(is_expried): #if token is expried, get a new token with the refresh token
-        sp = spotipy.Spotify(auth=TOKEN) #creates object that interacts with spotify api
+        sp = spotipy.Spotify(auth=refesh_the_token())#Refreshes the token from now on after 
     else:
-        sp = spotipy.Spotify(auth=refesh_the_token()) #creates object that interacts with spotify api
+        sp = spotipy.Spotify(auth=TOKEN) #creates object that interacts with spotify api; uses the first token generated; token only last 1 hour
 
     
         #chop playlist link into uri format
@@ -97,10 +97,9 @@ def sendOff():
         if "spotify:track:" in line:
             tracks[0] = (line.strip()) #adds to the first element over and over again
             sp.playlist_add_items(playlist_id=PLAYLISTID, items=[tracks][0]) #adds to the actual playlist
-    print("Request was sent and went through!")
     f = open('uri.txt', 'r+')
     f.truncate(0) 
-    return "Request was sent and went through!"
+    return "Playlist update request was sent and went through!"
  
 
 #sendOff()
