@@ -5,7 +5,6 @@ from datetime import datetime
 import json
 import playlist_update
 from os import path
-#Token vaild as of 1/2/2023
 
 pgrm_signature = "spotbot.py: "
 
@@ -49,37 +48,30 @@ async def sLink(ctx):
 #This is to grab the past songs that have been sent to the channel
 @bot.command()
 async def grabPast(ctx):
-    with open("setup.json", 'r') as setupf:
+    with open("setup.json", 'r') as setupf: #must reopen the file to check if flag has been updated
         data = json.load(setupf)
-        grab_past_flag = (data['grab_past_flag'])
+        grab_past_flag = (data['grab_past_flag']) 
 
     if(grab_past_flag) == 1: 
         await ctx.reply("grabPast has already been called. If this is a mistake please go to the setup.json file and set grab_past_flag to 0")
     else:
         word = "https://open.spotify.com/track"
         await ctx.reply("Grabbing songs now please wait until FINISHED is sent")
-        channel = ctx.channel
 
-        #MAKE SURE TO BUMP THIS LIMMIT UP TO A CRAZY NUMBER WEHN FULLY IMPLEMENTED
-        messages = [messages async for messages in ctx.channel.history(limit=500)] # This is the new way to do the .flatten() commented down below.
-        #messages = await ctx.channel.history(limit=500).flatten()
+        
+        messages = [messages async for messages in ctx.channel.history(limit=500000)] #If your bot is not reading all of your messages this number may have to be heigher
 
+        await ctx.send("Grabbing & Flitering Past Messages (this could take a while).....")
 
-        await ctx.send("Grabbing & Flitering Past Messages.....")
-
-        # to make it work with only one file, surprisingly to me all the file handling can be done in dupCheck()
+        # to make it work with only one file, surprisingly all the playlist file handling is done in dupCheck()
         for msg in messages:
             if word in msg.content:
-                dupCheck(msg.content)
-
-                ####
-                ####
-                #MAKE A FLAG FOR GRABPAST, this function should only need to be ran once, make it so it used uritxt before the patch w
-                #where it adds the whole text file and then the next uri, since this should be the first command you run when entering the server
-                #the command should then be disabled in a way
-                #####
-                ####
-        await ctx.send("Messages Grabbed, Process Complete, FINISHED")
+                dupCheck(msg.content)#send off the link
+        print(pgrm_signature + playlist_update.sendOff()) #send off the playlist.txt file to be uploaded to Spotify
+        await ctx.send("Messages Grabbed, Process Complete, FINISHED" + "\n Here is the Spotify Link: " + playlist_link)
+        update_gp_flag()
+        print("Updated the grabpast flag")
+        
 
 
 
@@ -92,7 +84,7 @@ async def on_message(msg):
         strCheck = "https://open.spotify.com/track"
 
         if re.search(strCheck, msg.content):
-            if not "Here are all the songs" in str(msg.content): # This had to be added as the way it works, it would catch all songs comand as a new link for some reason.
+            if not "Here are all the songs" in str(msg.content): # Without this it would catch all songs comand as a new link for some reason.
                 print(pgrm_signature + "Valid Spotify Link")
 
                 checkEmoji = "☑️"
@@ -100,23 +92,21 @@ async def on_message(msg):
 
                 test = dupCheck(msg.content)
 
-
         #Decides what emoji to add based on if it is a duplicate or not
                 if(test == True):
                     await msg.add_reaction (rEmoji)
                 else:
                     await msg.add_reaction(checkEmoji) 
                     print(pgrm_signature + playlist_update.sendOff())
-                    update_gp_flag()
                     await msg.reply("Added to Spotify Playlist!")
 
         else:            
-            print(pgrm_signature + "Not valid Link")
-        
+            print(pgrm_signature + "Not valid Spotify link")
+    
         await bot.process_commands(msg)
 
 
-
+#checks for duplicates before sending songs off to uri.txt
 def dupCheck(link):
     string1 = link
 
@@ -197,7 +187,7 @@ def uritxt(link):
             file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
         print(pgrm_signature + "uri.txt has been written to")
         file1.close()
-        #send off here then set grabpast to 1???
+        
     else:
         file1 = open("uri.txt", "w+")
 
@@ -211,33 +201,9 @@ def uritxt(link):
         count = 0
 
         #read uri text file
-        file1 = open("uri.txt", "r+")
-        rline1 = file1.readlines()
-        for line in rline1:
-            print(pgrm_signature + "Line{}: {}".format(count, line.strip()))
-
-        file1.close()
-
 
         print(pgrm_signature + "Uri text file written to succesfully!\n")
         print(pgrm_signature + "Sending songs off to spotify")
-  
-
-#two routes for this function
-#Option A figure out how to make vaild request to a server with a token 
-#Option B just have the silly bot open and close new tabs to localhost5000
-#We will need a basch script to make this work on linux and windows simotaniously
-#The bash script neeeds to run both main.py and app.py at the same time z
-#def sendOff():
-    #url = "http://127.0.0.1:5000/"
-    #webbrowser.get("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open(url)
-    #dt = datetime.now()
-    #print(pgrm_signature + "check app.py terminal if request was succesful TIMESTAMP:" + str(dt))
-    #time.sleep(10)
-    #os.system("taskkill /im chrome.exe /f")
-    
-    
-    #read uri text file
     
 def update_gp_flag(): 
  ###Update grab_past_flag#####
