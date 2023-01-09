@@ -3,7 +3,7 @@ import re
 import discord
 from datetime import datetime
 import json
-import tst
+import playlist_update
 from os import path
 #Token vaild as of 1/2/2023
 
@@ -101,7 +101,7 @@ async def on_message(msg):
                 await msg.add_reaction (rEmoji)
             else:
                 await msg.add_reaction(checkEmoji) 
-                print(tst.sendOff())
+                print(playlist_update.sendOff())
                 update_gp_flag()
                 await msg.reply("Added to Spotify Playlist!")
 
@@ -209,7 +209,6 @@ def uritxt(link):
         file1 = open("uri.txt", "r+")
         rline1 = file1.readlines()
         for line in rline1:
-            count += 1 
             print("Line{}: {}".format(count, line.strip()))
 
         file1.close()

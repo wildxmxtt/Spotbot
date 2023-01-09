@@ -2,12 +2,17 @@ import json
 import time
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import app 
+import requests
+import base64
 
 
 
 def sendOff():
     #opens the set up file
+    codef = open("code.txt", "r")
+    for line in codef:
+        CODE = line
+
     with open("setup.json", 'r') as info:
         data = json.load(info)
         playlist_link = (data['playlist_link']) #make a comment about how to pull playlist url
@@ -36,20 +41,48 @@ def sendOff():
     #refresh the token 
     
     def refesh_the_token():
-        now = int(time.time())#gets the current time 
+            #refresh_url = "https://accounts.spotify.com/api/token"
+            #This code was made possible by https://www.youtube.com/watch?v=-FsFT6OwE1A
 
-        is_expried = expires_at - now < 60 #checks to see if the token is expired
+            auth_client = client_id + ":" + client_secret
+            auth_encode = 'Basic ' + base64.b64encode(auth_client.encode()).decode()
 
-        time_left = expires_at - now
+            headers = {
+                'Authorization': auth_encode,
+                }
 
-        print("the time left on this token is: "+ str(time_left / 60) + "min")
-        app.get_token()
-        if(is_expried): #if token is expried, get a new token with the refresh token
-            app.get_token()
+            data = {
+                'grant_type' : 'refresh_token',
+                'refresh_token' : refresh_token
+                }
+
+            response = requests.post('https://accounts.spotify.com/api/token', data=data, headers=headers)
+
+            if(response.status_code == 200):
+                print("The request to went through we got a status 200; Spotify token refreshed")
+                response_json = response.json()
+                return response_json["access_token"]
+            else:
+                print("ERROR! The response we got was: "+ str(response))
+                return TOKEN #last ditch to try and make it work 
+
+    
+
+
 
     ##########################################
-    refesh_the_token()
-    sp = spotipy.Spotify(auth=TOKEN) #creates object that interacts with spotify api
+    now = int(time.time())#gets the current time 
+
+    is_expried = expires_at - now < 60 #checks to see if the token is expired
+
+    time_left = expires_at - now
+
+    print("the time left on this token is: "+ str(time_left / 60) + "min")
+    if(is_expried): #if token is expried, get a new token with the refresh token
+        sp = spotipy.Spotify(auth=TOKEN) #creates object that interacts with spotify api
+    else:
+        sp = spotipy.Spotify(auth=refesh_the_token()) #creates object that interacts with spotify api
+
     
         #chop playlist link into uri format
 
