@@ -8,11 +8,7 @@ import base64
 
 
 def sendOff():
-    #opens the set up file
-    codef = open("code.txt", "r")
-    for line in codef:
-        CODE = line
-
+    #opens the setup files
     with open("setup.json", 'r') as info:
         data = json.load(info)
         playlist_link = (data['playlist_link']) #make a comment about how to pull playlist url
