@@ -1,7 +1,8 @@
 {
     "client_id": "a08383e569fd4d9d9f06812485b72a86",
-    "client_secret": "63008b05ef5949d8b23c151e4c0e0a82",
-    "discord_token": "OTc2OTUxMzcwODE0OTg0MjUy.GuV6UN.rvjsqmkvV-FkQupu7xQUW8DpeXnBmcTxEH2K8M",
-    "playlist_link": "https://open.spotify.com/playlist/4pEpFayPbEQdQyjfITlXBK?si=3ba66cd7ee3244c5",
+    "client_secret": "e108eb05eeb645d6a42b80f3b9c529d8",
+    "discord_token": "OTc2OTUxMzcwODE0OTg0MjUy.G9XsbF.7R_xjOCl7usMtWm_I6LnYC6lW-EGUYaK-c5a5c",
+    "playlist_link": "https://open.spotify.com/playlist/2BkcefimIo08WD30E58vCh?si=dbc099e590cc4899",
+    "discord_channel": 1062098549111787650,
     "grab_past_flag": 1
 }

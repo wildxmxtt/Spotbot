@@ -4,7 +4,6 @@ from spotipy.oauth2 import SpotifyOAuth
 import time
 import json
 from datetime import datetime
-import main as discordBot
 
 
 #import DISCORD.main as dm #aiaised as dm
@@ -33,7 +32,6 @@ with open('setup.json', 'r') as setupf:
 def login():
     sp_oauth = create_spotify_oauth()
     auth_url = sp_oauth.get_authorize_url()
-    discordBot.bot()
     return redirect(auth_url)
 
 @app.route('/redirect')
@@ -64,7 +62,7 @@ def getTracks():
     tracks = ["blankfaketrack"] #needed to have one space in the array
     PLAYLISTID = "7tOjWDfeKSWc3cV19aTX1m"
     count = 0
-    file = open("DISCORD/uri.txt", "r") #open uri text file
+    file = open("uri.txt", "r") #open uri text file
     rline = file.readlines()
     
     #loops through the entire file and only adds one songs at a time to the array
@@ -96,7 +94,7 @@ def getTracks():
     spotifyRQ1  = str(len(all_songs))
     flag = True
     print( "The amount of songs in the playlist are: " + spotifyRQ1) #should add the amount that were in the uri.txt file 
-    print("TIMESTAMP:" + datetime.now())
+    print("TIMESTAMP:" + str(datetime.now()))
     open('DISCORD/uri.txt', 'w+').close()
     print("uri.txt has been reset")
     
