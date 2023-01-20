@@ -59,7 +59,7 @@ def getTracks():
     #URI PASSED IN HERE
 
 
-    tracks = ["blankfaketrack"] #needed to have one space in the array
+    tracks = ["blankfaketrack"] #needed to have one space in the arra
     PLAYLISTID = "7tOjWDfeKSWc3cV19aTX1m"
     count = 0
     file = open("uri.txt", "r") #open uri text file
@@ -95,7 +95,7 @@ def getTracks():
     flag = True
     print( "The amount of songs in the playlist are: " + spotifyRQ1) #should add the amount that were in the uri.txt file 
     print("TIMESTAMP:" + str(datetime.now()))
-    open('DISCORD/uri.txt', 'w+').close()
+    open('uri.txt', 'w+').close()
     print("uri.txt has been reset")
     
     return spotifyRQ1
@@ -117,8 +117,6 @@ def get_token():
         token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
         
     return token_info
-
-
 
 
 
