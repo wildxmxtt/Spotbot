@@ -1,8 +1,8 @@
 {
-    "client_id": "a08383e569fd4d9d9f06812485b72a86",
-    "client_secret": "e108eb05eeb645d6a42b80f3b9c529d8",
-    "discord_token": "OTc2OTUxMzcwODE0OTg0MjUy.GbxX_Y.1PCWbgyWlHq0Lt38VC1iazE_ZRCH6q9zLgriQk",
-    "playlist_link": "https://open.spotify.com/playlist/2BkcefimIo08WD30E58vCh?si=dbc099e590cc4899",
-    "discord_channel": 1062098549111787650,
-    "grab_past_flag": 1
+    "client_id": "",
+    "client_secret": "",
+    "discord_token": "",
+    "playlist_link": "",
+    "discord_channel": ,
+    "grab_past_flag": 0
 }
