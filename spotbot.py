@@ -74,8 +74,6 @@ async def grabPast(ctx):
         
 
 
-
-
 @bot.event
 async def on_message(msg):
     #grabs the discord channel specified in setup.json
@@ -96,9 +94,9 @@ async def on_message(msg):
                 if(test == True):
                     await msg.add_reaction (rEmoji)
                 else:
-                    await msg.add_reaction(checkEmoji) 
                     print(pgrm_signature + playlist_update.sendOff())
-                    await msg.reply("Added to Spotify Playlist!")
+                    await msg.add_reaction(checkEmoji) #adds emoji when song is added to playlist
+                    #await msg.reply("Added to Spotify Playlist!")
 
         else:            
             print(pgrm_signature + "Not valid Spotify link")

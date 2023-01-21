@@ -21,6 +21,7 @@ with open('setup.json', 'r') as setupf:
     data = json.load(setupf)
     client_id = (data['client_id'])
     client_secret = (data['client_secret'])
+    playlist_link = (data['playlist_link'])
 
 #do this function above twice
 
@@ -53,36 +54,20 @@ def getTracks():
     except:
         print("user not logged in")
         redirect(url_for('login', _external=False))
-    #USING THE TOKEN
+    #USING THE OAuth TOKEN
     sp = spotipy.Spotify(auth=token_info['access_token'])
-    #playlist_id, items
-    #URI PASSED IN HERE
 
+    fline = playlist_link.replace("https://open.spotify.com/playlist/", "")#deletes first part of the link
+    PLAYLISTID = (fline.split("?si")[0]) #cuts off exess info from the link
 
-    tracks = ["blankfaketrack"] #needed to have one space in the arra
-    PLAYLISTID = "7tOjWDfeKSWc3cV19aTX1m"
-    count = 0
-    file = open("uri.txt", "r") #open uri text file
-    rline = file.readlines()
-    
-    #loops through the entire file and only adds one songs at a time to the array
-    for line in rline:
-        if "spotify:track:" in line:
-            tracks[0] = (line.strip()) #adds to the first element over and over again
-            sp.playlist_add_items(playlist_id=PLAYLISTID, items=[tracks][0])
     print("SPOTIFY REQUEST WENT THROUGH!!!! ")
-    file.close()
-    #Returning the lenght of a playlist to avoid an error
     
 
 
-###
+#The below code works due to this video: https://www.youtube.com/watch?v=1TYyX8soQ8M&list=PLhYNDxVvF4oXa9ihs8WCzEriZsCF3Pp7A&index=3
+#go to 14:00 specifically 
 
-#This code works go to 14:00 on this yt video https://www.youtube.com/watch?v=1TYyX8soQ8M&list=PLhYNDxVvF4oXa9ihs8WCzEriZsCF3Pp7A&index=3
-#Code is from here ^^
-
-###
-
+#Returning the lenght of a playlist to avoid an error and to produce a valid token 
     all_songs = []
     count = 0
     while True:
@@ -93,13 +78,12 @@ def getTracks():
             break
     spotifyRQ1  = str(len(all_songs))
     flag = True
-    print( "The amount of songs in the playlist are: " + spotifyRQ1) #should add the amount that were in the uri.txt file 
+    print( "The amount of songs in the playlist are: " + spotifyRQ1)
     print("TIMESTAMP:" + str(datetime.now()))
-    open('uri.txt', 'w+').close()
+    open('uri.txt', 'w+').close() #ensures uri.txt is empty
     print("uri.txt has been reset")
     
     return spotifyRQ1
-    #return str(sp.current_user_saved_tracks(limit=50, offset=0)['items'][0])#this returns the first saved track
 
 #this function will get us a new token if ours expires 
 #also ensures that there is token data & if there is not it will
@@ -119,7 +103,7 @@ def get_token():
     return token_info
 
 
-
+#creates an oAuth object
 def create_spotify_oauth():
     return SpotifyOAuth(
     client_id,
