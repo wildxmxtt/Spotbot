@@ -30,7 +30,7 @@ How to setup:
     
     f. In the sidebar, you'll find the OAuth2 go to general and place http://localhost:5000/callback in redirecturi (refimage8)
     
-    g. In the sidebar, go to URL Genreator. Fill out feilds just like refimage 9 & 10 **NOTE you only need *bot* & *messages.read* to use this type of bot* 
+    g. In the sidebar, go to URL Genreator. Fill out feilds just like refimage 9 & 10 **NOTE you only need *bot* & *messages.read* to use this type of bot when looking at refimage9** 
     
     h. Invite the bot to the server you want it to run in
     
@@ -46,9 +46,9 @@ How to setup:
 4. All fields in setup.json should be filled out and look like refimage12
 
 5. Install requrements.txt to your machine 
-  
-  a. pip install -r requirements.txt in your terminal
-
+      ```cmd
+    pip install -r requirements.txt
+    ```
 6. Run app.py (only needs to be done once)
     a. In your terminal type flask run
     ```cmd
@@ -60,13 +60,15 @@ How to setup:
     
     d. Once logged in on the webpage you should get the number of songs in the playlist you placed in setup.json refimage(13 & 15)
     
-    e. Ctrl + c in terminal (app.py will never need to be ran again)
+    e. Ctrl + c in terminal (app.py will never need to be ran again, as it is only used to **generate** a token for your bot to use)
     
  7. Run spotbot.py
-    
+    ```cmd
+    python3 spotbot.py
+    ```
     (If you dont have past songs you want to grab skip steps b and c and set the grabpast flag to 1 in setup.json or else it will break the code)
     
-    a.Once in the terminal it reads "spotbot.py: SpotifyBot: ON" (refimage16)
+    a.Once in the terminal it should read "spotbot.py: SpotifyBot: ON" (refimage16)
     
     b.Type [!grabPast] in the channel you specified in step 2j; This will grab all past spotify links sent in the chat **If you want to run this command and you have more than 500000 messages in your chat go to *line 62* in spotbot.py and increase the number as much as needed** 
     
