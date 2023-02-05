@@ -30,7 +30,7 @@ How to setup:
     
     f. In the sidebar, you'll find the OAuth2 go to general and place http://localhost:5000/callback in redirecturi (refimage8)
     
-    g. In the sidebar, go to URL Genreator. Fill out feilds just like refimage 9 & 10
+    g. In the sidebar, go to URL Genreator. Fill out feilds just like refimage 9 & 10 **NOTE you only need *bot* & *messages.read* to use this type of bot* 
     
     h. Invite the bot to the server you want it to run in
     
@@ -50,8 +50,10 @@ How to setup:
   a. pip install -r requirements.txt in your terminal
 
 6. Run app.py (only needs to be done once)
-    a. flask run in your terminal
-    
+    a. In your terminal type flask run
+    ```cmd
+    flask run
+    ```
     b. Go to https://localhost:5000
     
     c. Login with your spotify username and password
