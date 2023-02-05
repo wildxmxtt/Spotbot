@@ -1,8 +1,8 @@
 {
-    "client_id": "",
-    "client_secret": "",
-    "discord_token": "",
-    "playlist_link": "",
-    "discord_channel": ,
+    "client_id": "place spotify client ID here",
+    "client_secret": "place spotify client secret here",
+    "discord_token": "place Discord bot token here",
+    "playlist_link": "place personal spotify playlist link here",
+    "discord_channel": "place the discord channel you want the bot to read here",
     "grab_past_flag": 0
 }
