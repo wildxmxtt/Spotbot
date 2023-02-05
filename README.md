@@ -36,7 +36,7 @@ How to setup:
     
     i. Grab the link to the chat you want the bot to run in; right click on a discord channel and select copyID (refimage11)
     
-    j. Paste the ID you recieved in the "discord_channel" : "place playlist link here" inside of the setup.json file
+    j. Paste the ID you recieved in the "discord_channel" : "place the discord channel you want the bot to read here" inside of the setup.json file
 
 3. Get spotify playlist link that the bot will add to
     
