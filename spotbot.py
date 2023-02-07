@@ -4,6 +4,7 @@ import discord
 from datetime import datetime
 import json
 import playlist_update
+import random
 from os import path
 
 pgrm_signature = "spotbot.py: "
@@ -44,6 +45,33 @@ async def hlp(ctx):
 async def sLink(ctx):
      await ctx.reply(playlist_link)
 
+#a request command to give the user back a random song from the playlist 
+@bot.command()
+async def r(ctx):
+    file = open("playlist.txt", "r") #Opens the playlist.txt file 
+    count = 0
+    for line in file:
+        print(line)
+        count +=1
+
+    requestNum = random.randint(0,count-1)
+    print("number generated: " + str(requestNum))
+    with open("playlist.txt", 'r') as fp:
+        # lines to read
+        line_numbers = [requestNum, count]
+        # To store lines
+        lines = []
+        for i, line in enumerate(fp):
+            # read from line 0 and the len of the text file
+            if i in line_numbers:
+                lines.append(line.strip())
+            elif i > count:
+                # don't read after line 7 to save time
+                break
+    pre = str(lines)[1:-1] #removes square bracket
+    random_song = pre[1:-1] #removes '' from front and back of the text 
+
+    await ctx.reply("The random song you got was: " + random_song)
 
 #This is to grab the past songs that have been sent to the channel
 @bot.command()
