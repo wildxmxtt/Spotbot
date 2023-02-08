@@ -105,7 +105,7 @@ async def grabPast(ctx):
 @bot.event
 async def on_message(msg):
     #grabs the discord channel specified in setup.json
-    if msg.channel.id == discord_channel:
+    if msg.channel.id == discord_channel & msg.author.name != "SpotifyLinkGrabber#4227":
     #once again, all the file work can be moved over to the dupCheck() function for single file handling
         strCheck = "https://open.spotify.com/track"
 
