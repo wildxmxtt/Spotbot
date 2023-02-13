@@ -80,8 +80,8 @@ def sendOff():
     #replace x, with y
     #Ex: line.replace(x,y)
     fline = playlist_link.replace("https://open.spotify.com/playlist/", "")#deletes first part of the link
-    PLAYLISTID = (fline.split("?si")[0]) #cuts off exess info from the link
-    
+    PLAYLISTID = fline.split("?", 1)[0]
+    #PLAYLISTID = (fline.split("?si")[0]) #cuts off exess info from the link
 
     tracks = ["blankfaketrack"] #needed to have one space in the array
     file = open("uri.txt", "r") #open uri text file
