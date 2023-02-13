@@ -5,6 +5,7 @@ from datetime import datetime
 import json
 import playlist_update
 from os import path
+import random
 
 pgrm_signature = "spotbot.py: "
 
@@ -34,15 +35,47 @@ async def on_ready():
 @bot.command()
 async def hlp(ctx):
     await ctx.reply("The commands for this bot go as follows: \n" + 
-    "sLink (gives the user the link to the spotify playlist) \n" + 
-    "grabPast (allows for the user to grab past songs sent in a chat, this can only be ran once) \n" +
+    "[!]sLink (gives the user the link to the spotify playlist) \n" + 
+    "[!]grabPast (allows for the user to grab past songs sent in a chat, this can only be ran once) \n" +
+    "[!]r (gives the user a random song from the playlist!) \n" +
     "When a user sends a messsage in THIS CHAT the bot will analyis that message, if it is a valid spotify link it will be placed into the playlist\n" 
+    
     )
 
 #gives the link set in the setup.json file
 @bot.command()
 async def sLink(ctx):
      await ctx.reply(playlist_link)
+
+#a request command to give the user back a random song from the playlist 
+@bot.command()
+async def r(ctx): 
+    file = open("playlist.txt", "r") #Opens the playlist.txt file 
+    count = 0
+    for line in file:
+        #print(line)
+        count +=1
+
+    print("amt of songs in playlist.txt: " + str(count))
+    requestNum = random.randint(0,count-1)
+    print("number generated: " + str(requestNum))
+    with open("playlist.txt", 'r') as fp:
+        # lines to read
+        line_numbers = [requestNum, count]
+        # To store lines
+        lines = []
+        for i, line in enumerate(fp):
+            # read from line 0 and the len of the text file
+            if i in line_numbers:
+                lines.append(line.strip())
+            elif i > count:
+                # don't read after line 7 to save time
+                break
+    pre = str(lines)[1:-1] #removes square bracket
+    random_song = pre[1:-1] #removes '' from front and back of the text 
+    print("The random song you got was: " + random_song)
+    await ctx.reply("The random song you got was: " + random_song)
+
 
 
 #This is to grab the past songs that have been sent to the channel
@@ -82,7 +115,7 @@ async def on_message(msg):
         strCheck = "https://open.spotify.com/track"
 
         if re.search(strCheck, msg.content):
-            if not "Here are all the songs" in str(msg.content): # Without this it would catch all songs comand as a new link for some reason.
+            if not "The random song you got was:" in str(msg.content): # Without this it would catch all songs comand as a new link for some reason.
                 print(pgrm_signature + "Valid Spotify Link")
 
                 checkEmoji = "☑️"
@@ -96,7 +129,8 @@ async def on_message(msg):
                 else:
                     print(pgrm_signature + playlist_update.sendOff())
                     await msg.add_reaction(checkEmoji) #adds emoji when song is added to playlist
-                    #await msg.reply("Added to Spotify Playlist!")
+                    if(grab_past_flag == 0):
+                        await msg.reply("WARNING GRAB PAST FLAG IS STILL ZERO, IF THERE ARE NO PAST SONGS YOU NEED TO GRAB. SET THE GRAB PAST FLAG TO ZERO IN setup.json AND RESTART spotbot.py. THIS WILL CAUSE ERRORS ELSEWISE")
 
         else:            
             print(pgrm_signature + "Not valid Spotify link")
@@ -107,7 +141,6 @@ async def on_message(msg):
 #checks for duplicates before sending songs off to uri.txt
 def dupCheck(link):
     string1 = link
-
     # opening a text files
     try:
         file = open("playlist.txt", "r") # I am changing the name to playlist as it makes more sense in my head this could be a problem later so revert if needed.
@@ -124,18 +157,28 @@ def dupCheck(link):
     # Loop through the file line by line
     for line in file:
         index += 1
+        print("Song" + str(index) + ": " +line)
+        #are the same song:
+        #https://open.spotify.com/track/2XgTw2co6xv95TmKpMcL70?si=dbe7fd4a016344ec
+        #https://open.spotify.com/track/2XgTw2co6xv95TmKpMcL70?si=8fe74b50ad804b52
         
-        # checking string is present in line or not (also adds some error checks for constraining commas to only accept what discord displays if commas are present.)
-        if string1.split(",", 1)[0] in line: 
+        sep = '?' #where to seperate
+        stripped = string1.split(sep, 1)[0]
+
+        #print("Stripped: "+ str(index) +": " + stripped)
+
+        if stripped in str(line):
             flag = 1
             break
 
         if string1.split("\n", 1)[0] in line: 
             flag = 1
             break
-    
+
+    print(flag)
     #swap file operation to append
     file.close()
+
     file = open("playlist.txt", "a")
 
 
@@ -159,6 +202,7 @@ def dupCheck(link):
         print(pgrm_signature + "DUPLICATE LINK FOUND, NOT ADDED TO PLAYLIST FILE")
         file.close()
         return True
+    #commit me 
 
 
 def uritxt(link):
@@ -170,6 +214,7 @@ def uritxt(link):
     print(pgrm_signature + "Writting to uri.txt..... \n")
     
     if(grab_past_flag == 0):
+        print("WARNING GRAB PAST FLAG IS SET TO ZERO, MAKE SURE THIS IS SET TO 1 IF YOU DONT HAVE ANY SONGS YOU NEED TO GET FROM THE PAST")
         print(pgrm_signature + "Writting to uri.txt.....: \n")
         file = open("playlist.txt", "r+")
         file1 = open("uri.txt", "w+")
@@ -193,7 +238,8 @@ def uritxt(link):
 
         #chops it up into uri format
         fline = song.replace("https://open.spotify.com/track/", "spotify:track:")
-        file1.write(fline.split("?si")[0] + "\n") #cuts off exess info from the uri and writes it to the file
+        fline2 = fline.split("?", 1)[0]
+        file1.write(fline2 + "\n") #cuts off exess info from the uri and writes it to the file
 
         file1.close()
         count = 0
