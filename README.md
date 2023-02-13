@@ -1,4 +1,4 @@
-# Spotbot2
+# Spotbot
 *Made with python 3.10.9 , Make sure you have this installed !*
 
 A discord bot that scrapes users spotify links from a set channel and automatically adds those songs to a set spotify playlist. Think of it like and *over* engineered collabrtive playlist.
