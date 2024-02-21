@@ -45,14 +45,15 @@ How to setup:
     
 4. All fields in setup.json should be filled out and look like refimage12
 
-5. Install requrements.txt to your machine 
+5. Set up requirments in python
     
-a. Set up a python virtual enviroment (RECOMENEDED): https://docs.python.org/3/library/venv.html
+    a. Set up a python virtual enviroment (RECOMENEDED): https://docs.python.org/3/library/venv.html
 
-b:
+    b. Install requrements.txt to your machine 
       ```cmd
     pip install -r requirements.txt
     ```
+    
 7. Run app.py (only needs to be done once)
     a. In your terminal type flask run
     ```cmd
