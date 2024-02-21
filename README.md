@@ -47,11 +47,12 @@ How to setup:
 
 5. Install requrements.txt to your machine 
     a. Set up a python virtual enviroment (RECOMENEDED): https://docs.python.org/3/library/venv.html
+
     b:
       ```cmd
     pip install -r requirements.txt
     ```
-6. Run app.py (only needs to be done once)
+7. Run app.py (only needs to be done once)
     a. In your terminal type flask run
     ```cmd
     flask run
@@ -64,7 +65,7 @@ How to setup:
     
     e. Ctrl + c in terminal (app.py will never need to be ran again, as it is only used to **generate** a token for your bot to use)
     
- 7. Run spotbot.py
+ 8. Run spotbot.py
     ```cmd
     python3 spotbot.py
     ```
@@ -76,6 +77,6 @@ How to setup:
     
     c. Once [!grabPast] is ran you should see it act like refrence (image18), grabpast can only be ran once, if this needs to be changed go to the setup.json file and set the flag back to 0 instead of 1
 
-8. Now when songs are sent to the channel it will automatically send them to spotify! (refimage 20 & 21)
+9. Now when songs are sent to the channel it will automatically send them to spotify! (refimage 20 & 21)
 
 Enjoy!
